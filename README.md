@@ -33,3 +33,7 @@ Thanks sincerely to all the members of KCDC and local governments.
   - Youna Jung ([You Na Jung](https://www.kaggle.com/younajung))
 - **Logo Designer**
   - [Rinchong Kim](http://indesignlab.creatorlink.net)
+
+
+
+Fighting!
