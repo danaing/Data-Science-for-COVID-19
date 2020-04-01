@@ -2,9 +2,11 @@
 # TODO
 -----
 * [x] 1. UTM to latlong in python (or geopandas) 알아오기
-* [ ] 2. 지도 위에 경로 표시
-* [ ] 3. animate : 날짜별로
+* [x] 2. 지도 위에 경로 표시
+* [x] 3. animate : 날짜별로
 
+* [ ] 1. Case
+* [ ] 2. Patient Info
 -----
 * [x] 1. Data Merge (-ing)
 * [ ] 2. Animated plot with Plotly (-ing)
