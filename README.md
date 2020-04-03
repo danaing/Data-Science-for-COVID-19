@@ -6,7 +6,7 @@
 * [x] 3. animate : 날짜별로
 
 * [ ] 1. Case
-* [ ] 2. Patient Info
+* [ ] 2. Patient Info (-ing)
 -----
 * [x] 1. Data Merge (-ing)
 * [ ] 2. Animated plot with Plotly (-ing)
