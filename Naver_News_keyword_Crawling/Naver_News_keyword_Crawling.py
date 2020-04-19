@@ -27,7 +27,7 @@ whole_source = ""
 
 
 ### 2020.01.01~2020.04.18 기사 최대 100개씩
-date_dict = {'2020.01.': range(0,31), '2020.02.': range(0,29), '2020.03.': range(0,31), '04': range(0,18)}
+date_dict = {'2020.01.': range(0,31), '2020.02.': range(0,29), '2020.03.': range(0,31), '2020.04.': range(0,18)}
 
 list(date_dict.keys())
 list(date_dict.values())
