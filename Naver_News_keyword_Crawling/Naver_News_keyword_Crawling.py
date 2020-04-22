@@ -11,10 +11,10 @@ from konlpy.tag import Okt
 from collections import Counter
 import pandas as pd
 import numpy as np
-import os
+okt = Okt()
 
 # twitter = Twitter()
-okt = Okt()
+
 
 os.getcwd()
 os.chdir('C:\\Users\\Danah\\Documents\\GitHub\\Data-Science-for-COVID-19\\Naver_News_keyword_Crawling\\')
@@ -71,6 +71,23 @@ for keyword in keyword_dict :
 #==================== Crawling End ====================#
 
 
+#================== file check =======================#
+os.getcwd()
+os.chdir('C:\\Users\\Danah\\Documents\\GitHub\\Data-Science-for-COVID-19\\Naver_News_keyword_Crawling\\')
+
+
+dalgona = pd.read_csv('newstitle_달고나커피.txt', sep='\t')
+mask = pd.read_csv('newstitle_마스크.txt', sep='\t')
+society = pd.read_csv('newstitle_사회적거리두기.txt', sep='\t')
+son = pd.read_csv('newstitle_손씻기.txt', sep='\t')
+uhan = pd.read_csv('newstitle_우한.txt', sep='\t')
+zipcok = pd.read_csv('newstitle_집콕.txt', sep='\t')
+corona = pd.read_csv('newstitle_코로나.txt', sep='\t')
+harujongil = pd.read_csv('newstitle_하루종일.txt', sep='\t')
+COVID = pd.read_csv('newstitle_COVID.txt', sep='\t')
+
+corona.head()
+
 ################ Tokenizer ################
 
 def tokenizer_okt_pos(doc):
@@ -86,18 +103,19 @@ def imp_tokken(sentence):
             noun_adj_list.append(word)
     return noun_adj_list
 
-list(news['title']).apply(tokenizer_okt_pos)
+def list_appending(lists):
+    list_append=[]
+    for d in lists :
+        for a in d:
+            list_append.append(a)
+    return list_append
 
-news['title_tokken'] = news['title'].apply(tokenizer_okt_pos)
-news['title_imp_tokken'] = news['title_tokken'].apply(imp_tokken)
 
+corona['title_tokken'] = corona['title'].apply(tokenizer_okt_pos)
+corona['title_imp_tokken'] = corona['title_tokken'].apply(imp_tokken)
+corona.head()
 
-list=[]
-for d in news.title_imp_tokken :
-    for a in d:
-        list.append(a)
-count = Counter(list)
-
+count = Counter(list_appending(corona['title_imp_tokken']))
 title_count = dict(count.most_common())
 title_count
 
@@ -105,6 +123,7 @@ title_count
 ################ word cloud ################
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
+os.chdir('C:\\Users\\Danah\\Documents\\GitHub\\Data-Science-for-COVID-19\\Naver_News_keyword_Crawling\\wordcloud_img\\')
 
 %matplotlib inline
 import matplotlib
@@ -115,19 +134,128 @@ matplotlib.rc('axes',unicode_minus = False)
 
 wordcloud = WordCloud(font_path = 'C:/Windows/Fonts/malgun.ttf', background_color='white',colormap = "Accent_r", width=1500, height=1000).generate_from_frequencies(title_count)
 
+
 fig = plt.figure(1,figsize=(13, 13))
+fig = plt.axis('off')
 plt.imshow(wordcloud)
-plt.axis('off')
-plt.savefig('fig.png', bbox_inces='tight', dpi=300)
-plt.close()
 wordcloud.to_file("img.png")
+plt.close()
 
 
 
 
 
-#================== file =======================#
-file=open('newstitle_마스크.txt','r')
-All=file.read()
-print(All)
-file.close()
+#===================== 코로나 살펴보기 =====================#
+
+
+# 1월
+jan = ( corona.date >= '2020.01.01') & (corona.date < '2020.02.01')
+count = Counter(list_appending(corona.loc[jan,'title_imp_tokken']))
+title_count = dict(count.most_common())
+
+wordcloud = WordCloud(font_path = 'C:/Windows/Fonts/malgun.ttf', background_color='white',colormap = "Accent_r", width=1500, height=1000).generate_from_frequencies(title_count)
+
+fig = plt.figure(1,figsize=(13, 13))
+fig = plt.axis('off')
+plt.imshow(wordcloud)
+wordcloud.to_file("코로나_1월.png")
+plt.close()
+
+# 2월
+feb = ( corona.date >= '2020.02.01') & (corona.date < '2020.03.01')
+count = Counter(list_appending(corona.loc[feb,'title_imp_tokken']))
+title_count = dict(count.most_common())
+
+wordcloud = WordCloud(font_path = 'C:/Windows/Fonts/malgun.ttf', background_color='white',colormap = "Accent_r", width=1500, height=1000).generate_from_frequencies(title_count)
+
+fig = plt.figure(1,figsize=(13, 13))
+fig = plt.axis('off')
+plt.imshow(wordcloud)
+wordcloud.to_file("코로나_2월.png")
+plt.close()
+
+# 3월
+mar = ( corona.date >= '2020.03.01') & (corona.date < '2020.04.01')
+count = Counter(list_appending(corona.loc[mar,'title_imp_tokken']))
+title_count = dict(count.most_common())
+
+wordcloud = WordCloud(font_path = 'C:/Windows/Fonts/malgun.ttf', background_color='white',colormap = "Accent_r", width=1500, height=1000).generate_from_frequencies(title_count)
+
+fig = plt.figure(1,figsize=(13, 13))
+fig = plt.axis('off')
+plt.imshow(wordcloud)
+wordcloud.to_file("코로나_3월.png")
+plt.close()
+
+
+
+
+#===================== 하루종일 살펴보기 =====================#
+harujongil['title_tokken'] = harujongil['title'].apply(tokenizer_okt_pos)
+harujongil['title_imp_tokken'] = harujongil['title_tokken'].apply(imp_tokken)
+harujongil.head()
+
+count = Counter(list_appending(harujongil['title_imp_tokken']))
+title_count = dict(count.most_common())
+title_count
+
+wordcloud = WordCloud(font_path = 'C:/Windows/Fonts/malgun.ttf', background_color='white',colormap = "Accent_r", width=1500, height=1000).generate_from_frequencies(title_count)
+
+fig = plt.figure(1,figsize=(13, 13))
+fig = plt.axis('off')
+plt.imshow(wordcloud)
+wordcloud.to_file("하루종일.png")
+plt.close()
+
+
+# 1월
+jan = ( harujongil.date >= '2020.01.01') & (harujongil.date < '2020.02.01')
+count = Counter(list_appending(harujongil.loc[jan,'title_imp_tokken']))
+title_count = dict(count.most_common())
+
+wordcloud = WordCloud(font_path = 'C:/Windows/Fonts/malgun.ttf', background_color='white',colormap = "Accent_r", width=1500, height=1000).generate_from_frequencies(title_count)
+
+fig = plt.figure(1,figsize=(13, 13))
+fig = plt.axis('off')
+plt.imshow(wordcloud)
+wordcloud.to_file("하루종일_1월.png")
+plt.close()
+
+# 2월
+feb = ( harujongil.date >= '2020.02.01') & (harujongil.date < '2020.03.01')
+count = Counter(list_appending(harujongil.loc[feb,'title_imp_tokken']))
+title_count = dict(count.most_common())
+
+wordcloud = WordCloud(font_path = 'C:/Windows/Fonts/malgun.ttf', background_color='white',colormap = "Accent_r", width=1500, height=1000).generate_from_frequencies(title_count)
+
+fig = plt.figure(1,figsize=(13, 13))
+fig = plt.axis('off')
+plt.imshow(wordcloud)
+wordcloud.to_file("하루종일_2월.png")
+plt.close()
+
+# 3월
+mar = ( harujongil.date >= '2020.03.01') & (harujongil.date < '2020.04.01')
+count = Counter(list_appending(harujongil.loc[mar,'title_imp_tokken']))
+title_count = dict(count.most_common())
+
+wordcloud = WordCloud(font_path = 'C:/Windows/Fonts/malgun.ttf', background_color='white',colormap = "Accent_r", width=1500, height=1000).generate_from_frequencies(title_count)
+
+fig = plt.figure(1,figsize=(13, 13))
+fig = plt.axis('off')
+plt.imshow(wordcloud)
+wordcloud.to_file("하루종일_3월.png")
+plt.close()
+
+
+
+#===================== 언급량의 변화 =====================#
+
+harujongil.title_imp_tokken.apply(Counter)
+
+
+a=harujongil.title_imp_tokken.apply(Counter)
+a[0].most_common(10)
+a[1].most_common(10)
+a[2].most_common(10)
+a[3].most_common(10)
