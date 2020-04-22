@@ -17,12 +17,11 @@ import os
 okt = Okt()
 
 os.getcwd()
-os.chdir('C:\\Users\\Danah\\Documents\\GitHub\\Data-Science-for-COVID-19\\DA_COMMIT1_Crawling\\')
+os.chdir('C:\\Users\\Danah\\Documents\\GitHub\\Data-Science-for-COVID-19\\Naver_News_keyword_Crawling\\')
 
 #자가격리도 해보기
 ################ paging 크롤링 ################
 keyword_dict = ['집콕', '하루종일', 'COVID', '코로나', '우한', '사회적거리두기', '마스크', '손씻기', '달고나커피']
-keyword = keyword_dict[0]
 whole_source = ""
 
 
@@ -64,12 +63,13 @@ for keyword in keyword_dict :
 
         print(month,'에 총', total_title_cnt, '개 기사를 크롤링했습니다.')
 
-    file_csv = 'newstitle_' + keyword + '.csv'
-    file_txt = 'newstitle_' + keyword + '.txt'
+    file_csv = 'newstitle_' + keyword + '_4월.csv'
+    file_txt = 'newstitle_' + keyword + '_4월.txt'
 
     news.to_csv(file_csv, index=False)
     news.to_csv(file_txt, index=False, header=True, sep="\t")
 #==================== Crawling End ====================#
+
 
 ################ Tokenizer ################
 
@@ -121,3 +121,13 @@ plt.axis('off')
 plt.savefig('fig.png', bbox_inces='tight', dpi=300)
 plt.close()
 wordcloud.to_file("img.png")
+
+
+
+
+
+#================== file =======================#
+file=open('newstitle_마스크.txt','r')
+All=file.read()
+print(All)
+file.close()
