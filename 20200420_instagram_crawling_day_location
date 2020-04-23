@@ -6,7 +6,7 @@ from time import sleep
 import pandas as pd
 import os
 from urllib.request import HTTPError
-
+from selenium.common.exceptions import NoSuchElementException
 
 
 os.chdir("C:/Users/JYW/Desktop/Github/Data-Science-for-COVID-19")
@@ -25,8 +25,6 @@ for j in range(0,len(url_list)) :
     print(list(url_list.keys())[j]+"키워드 작업 중")
     url = list(url_list.values())[j]
     driver = webdriver.Chrome('C:/Users/JYW/Documents/chromedriver_win32/chromedriver.exe')
-
-#react-root > section > main > article > div.EZdmt > div > div > div:nth-child(1)
 
     driver.get(url)
     sleep(5)
@@ -66,31 +64,42 @@ for j in range(0,len(url_list)) :
                 last_height = new_height
                 continue
 
-    csvtext = []
-
     reallinknum = len(reallink)
+    reallink = list(set(reallink))
     print("총"+str(reallinknum)+"개의 데이터.")
 
-    for i in range(0,reallinknum):
-        csvtext.append([])
+    csvtext = []
+    driver = webdriver.Chrome('C:/Users/JYW/Documents/chromedriver_win32/chromedriver.exe')
 
+    for i in range(15448,reallinknum):
+        csvtext.append([])
         ### time & location
         url = 'https://www.instagram.com/p'+reallink[i]
         driver.get(url)
-        sleep(2)
-        driver.find_element_by_xpath('//*[@id="react-root"]/section/main/div/div[1]/article/div[2]/div[1]/ul/div/li/div/div/div[2]/div/div/time')
+        sleep(1.5)
 
-        pageString = driver.page_source
-        page = BeautifulSoup(pageString, "lxml")
+        try:
+            driver.find_element_by_xpath('//*[@id="react-root"]/section/main/div/div[1]/article/div[2]/div[1]/ul/div/li/div/div/div[2]/div/div/time')
+            pageString = driver.page_source
+            page = BeautifulSoup(pageString, "lxml")
 
-        time_class = page.find_all(name="div", attrs={"class":"k_Q0X NnvRN"})
+            loc_class = page.find_all(name="div", attrs={"class":"JF9hh"})
+            time_class = page.find_all(name="div", attrs={"class":"k_Q0X NnvRN"})
 
-######################## 여기서부터 위치 작업 해주면 된다!!!!!!!!!
-        time = str(time_class[0].select("time"))
-        time = time[(time.find("datetime")+10):(time.find("datetime")+20)]
+            loc = str(loc_class[0].select("a"))
+            loc = loc[(loc.find(">")+1):(loc.find("</"))]
 
-        csvtext[i].append(time)
+            time = str(time_class[0].select("time"))
+            time = time[(time.find("datetime")+10):(time.find("datetime")+20)]
 
+            csvtext[i].append(loc)
+            csvtext[i].append(time)
+
+        except NoSuchElementException:
+            print("오류발생"+str(i+1)+"번째 site")
+            csvtext[i].append(0)
+            csvtext[i].append(0)
+            pass
 
         ### ID & Hashtags
         req = Request('https://www.instagram.com/p'+reallink[i],headers={'User-Agent': 'Mozilla/5.0'})
@@ -101,18 +110,16 @@ for j in range(0,len(url_list)) :
             pass
 
         soup = BeautifulSoup(webpage,"lxml",from_encoding='utf-8')
-        soup1 = soup.find("meta",attrs={"property":"og:description"})
-        reallink1 = soup1['content']
-        reallink1 = reallink1[reallink1.find("@")+1:reallink1.find(")")]
-        reallink1 = reallink1[:20]
-        if reallink1 == '':
-            reallink1 = 'Null'
-        csvtext[i].append(reallink1)
 
         for reallink2 in soup.find_all("meta",attrs={"property":"instapp:hashtags"}):
             reallink2 = reallink2['content']
             csvtext[i].append(reallink2)
 
     data = pd.DataFrame(csvtext)
+
+    len(data)
+    data.to_csv(('insta_csvtext3.txt'), encoding='utf-8')
+    data.to_csv(('insta_csvtext4.csv'), encoding='utf-8')
+
     data.to_csv(('insta_'+list(url_list.keys())[j]+'.txt'), encoding='utf-8')
     print(list(url_list.keys())[j]+"키워드 작업 완료")
