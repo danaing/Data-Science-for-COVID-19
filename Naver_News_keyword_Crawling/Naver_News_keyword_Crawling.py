@@ -255,7 +255,9 @@ harujongil.title_imp_tokken.apply(Counter)
 
 
 a=harujongil.title_imp_tokken.apply(Counter)
-a[0].most_common(10)
+a
+a[0].most_common()
 a[1].most_common(10)
 a[2].most_common(10)
 a[3].most_common(10)
+a[95].most_common(10)
