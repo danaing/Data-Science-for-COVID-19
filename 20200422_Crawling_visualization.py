@@ -1,8 +1,18 @@
+import re
+from wordcloud import WordCloud, STOPWORDS
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+from IPython.display import set_matplotlib_formats
+mpl.rc('font',family = 'Malgun Gothic')
+from collections import Counter
 import pandas as pd
+import numpy as np
+from PIL import Image
 import os
 os.chdir("C:/Users/JYW/Desktop/Github/Data-Science-for-COVID-19")
 
-data = pd.read_csv("insta_csvtext2.csv")
+
+data = pd.read_csv("insta_csvtext4.csv")
 data = data.iloc[:,1:]
 
 location = data.iloc[:,0]
@@ -36,17 +46,6 @@ ban_list = ["코로나","코로나19","일회용마스크","미세먼지마스�
 hash = [x for x in hash if x not in ban_list]
 pd.Series(hash).value_counts().head(40)
 
-
-
-
-import re
-from wordcloud import WordCloud, STOPWORDS
-import matplotlib as mpl
-import matplotlib.pyplot as plt
-from IPython.display import set_matplotlib_formats
-mpl.rc('font',family = 'Malgun Gothic')
-from collections import Counter
-
 hash = Counter(hash)
 hash_count = dict(hash.most_common(1000))
 
@@ -56,7 +55,6 @@ fig = plt.figure(1,figsize=(13,13))
 fig = plt.axis('off')
 plt.imshow(wordcloud)
 
-
 img = np.array(Image.open('covid.jpg'))
 
 wordcloud = WordCloud(font_path = 'C:/Windows/Fonts/malgun.ttf', background_color='black',colormap = "Accent_r",  mask = img, margin=1).generate_from_frequencies(hash_count)
@@ -65,3 +63,13 @@ wordcloud = wordcloud.to_array()
 fig = plt.figure(1,figsize=(13,13))
 fig = plt.axis('off')
 plt.imshow(wordcloud, interpolation="bilinear")
+
+### 4. 시간에 따른 일상 키워드
+data.head(3)
+
+data.loc[1].str.contains("일상")
+a = data.str.contains("일상")
+
+
+b = [x for x in pd.DataFrame(a) if str(x) == '일상']
+b
