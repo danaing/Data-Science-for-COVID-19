@@ -1,0 +1,90 @@
+import numpy as np
+import pandas as pd
+import os
+import io
+import glob
+import re
+import sys
+from datetime import datetime, timedelta
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+from matplotlib import animation, rc
+import plotly.express as px
+import plotly.graph_objects as go
+
+import cufflinks as cf
+from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
+import plotly
+import plotly.io as pio
+
+import geopandas as gpd
+
+import numpy as np
+import pandas as pd
+import os
+import glob
+import re
+import sys
+import matplotlib.pyplot as plt
+import seaborn as sns
+from matplotlib import animation, rc
+import geopandas as gpd
+from shapely.geometry import Point, Polygon, LineString
+import plotly.express as px
+import folium
+from folium import plugins
+import branca
+import json
+import cufflinks as cf
+from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
+import plotly
+import plotly.io as pio
+import matplotlib.pylab as plt
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+from datetime import datetime, timedelta
+
+pio.renderers.default = "notebook_connected"
+
+
+import os
+os.getcwd()
+os.chdir("C:/Users/JYW/Desktop/Github/Data-Science-for-COVID-19")
+
+files = glob.glob('dataset/*.csv')
+data = []
+for i in files :
+    i = re.sub("dataset\\\\", "", i)
+    data.append(re.sub(".csv","",i))
+for i in range(len(files)) :
+    globals()[data[i]] = pd.read_csv(files[i])
+data
+
+twtinfo = PatientInfo[PatientInfo.age == '20s']
+twtinfo.head()
+len(twtinfo)
+twtinfo.infection_case.value_counts()
+# 해외 유입, 사람 접촉이 제일 많다.
+
+
+# infection_case를 시간별로 보자
+twtinfo['infection_case'] = twtinfo['infection_case'].fillna("NA")
+twtinfo.infection_case.isnull().sum()
+twtinfo.head()
+# infection_case가 NA인 애들도 있다. NA로 표시
+twtinfo = twtinfo.sort_values(by=['confirmed_date'], axis=0)
+counts = pd.get_dummies(twtinfo['infection_case']).cumsum()
+counts = twtinfo[["confirmed_date","infection_case"]].join(counts)
+
+counts["summary_infect"] = [ list(counts[list(counts.infection_case)[i]])[i] for i in range(0, len(counts)) ]
+counts = counts.drop_duplicates(["confirmed_date","infection_case"], keep="last")
+counts = counts.sort_values(by=['confirmed_date'], axis=0)
+counts.head(3)
+
+a = counts[counts.infection_case=="overseas inflow"]
+b = counts[counts.infection_case=="contact with patient"]
+plt.plot(b['confirmed_date'], b['summary_infect'])
+# plt.xticks(rotation=45)
+plt.plot(a['confirmed_date'], a['summary_infect'],b['confirmed_date'], b['summary_infect'])
+plt.xticks(rotation=45)
