@@ -45,8 +45,7 @@ https://www.bigdatahub.co.kr/product/view.do?pid=1002289
 #### (2) 변수 관련 통계분석
 - Corr, PCA, Clustering을 활용한 아주 간단한 통계 분석
 
-### 2. Untactness
-(아무단어임 <- 나중에 주제를 관통할 단어 찾아야 좋을듯) : 코로나로 비춰진 모습 위주로
+### 2. 이유?
 
 #### (1) 연관성 분석 -> 동그라미 시각화
 - 인스타 해쉬태그
@@ -56,7 +55,7 @@ https://www.bigdatahub.co.kr/product/view.do?pid=1002289
 - 가장 많이 등장하는것 or 등장량이 확산 트렌드와 비슷한 것 등을 뽑아내보자 -> Word cloud
 - 긍/부정요소로 감성분석
 
-## 3. Post Conora
+## 3. 인사이트?
 (가제) : 코로나 이후 혹은 1달 후 등등 예상
 
 #### (1) 집단 발병 케이스

@@ -11,6 +11,8 @@ from konlpy.tag import Okt
 from collections import Counter
 import pandas as pd
 import numpy as np
+import warnings
+warnings.filterwarnings(action='ignore')
 okt = Okt()
 
 # twitter = Twitter()
@@ -76,17 +78,16 @@ os.getcwd()
 os.chdir('C:\\Users\\Danah\\Documents\\GitHub\\Data-Science-for-COVID-19\\Naver_News_keyword_Crawling\\')
 
 
-dalgona = pd.read_csv('newstitle_달고나커피.txt', sep='\t')
-mask = pd.read_csv('newstitle_마스크.txt', sep='\t')
-society = pd.read_csv('newstitle_사회적거리두기.txt', sep='\t')
-son = pd.read_csv('newstitle_손씻기.txt', sep='\t')
-uhan = pd.read_csv('newstitle_우한.txt', sep='\t')
-zipcok = pd.read_csv('newstitle_집콕.txt', sep='\t')
-corona = pd.read_csv('newstitle_코로나.txt', sep='\t')
-harujongil = pd.read_csv('newstitle_하루종일.txt', sep='\t')
+dalgona = pd.read_csv('newstitle_dalgona.txt', sep='\t')
+mask = pd.read_csv('newstitle_mask.txt', sep='\t')
+society = pd.read_csv('newstitle_society.txt', sep='\t')
+son = pd.read_csv('newstitle_son.txt', sep='\t')
+uhan = pd.read_csv('newstitle_uhan.txt', sep='\t')
+zipcock = pd.read_csv('newstitle_zipcock.txt', sep='\t')
+corona = pd.read_csv('newstitle_corona.txt', sep='\t')
+harujongil = pd.read_csv('newstitle_harujongil.txt', sep='\t')
 COVID = pd.read_csv('newstitle_COVID.txt', sep='\t')
 
-corona.head()
 
 ################ Tokenizer ################
 
@@ -111,13 +112,57 @@ def list_appending(lists):
     return list_append
 
 
+dalgona['title_tokken'] = dalgona['title'].apply(tokenizer_okt_pos)
+dalgona['title_imp_tokken'] = dalgona['title_tokken'].apply(imp_tokken)
+
+mask['title_tokken'] = mask['title'].apply(tokenizer_okt_pos)
+mask['title_imp_tokken'] = mask['title_tokken'].apply(imp_tokken)
+
+society['title_tokken'] = society['title'].apply(tokenizer_okt_pos)
+society['title_imp_tokken'] = society['title_tokken'].apply(imp_tokken)
+
+son['title_tokken'] = son['title'].apply(tokenizer_okt_pos)
+son['title_imp_tokken'] = son['title_tokken'].apply(imp_tokken)
+
+uhan['title_tokken'] = uhan['title'].apply(tokenizer_okt_pos)
+uhan['title_imp_tokken'] = uhan['title_tokken'].apply(imp_tokken)
+
+zipcock['title_tokken'] = zipcock['title'].apply(tokenizer_okt_pos)
+zipcock['title_imp_tokken'] = zipcock['title_tokken'].apply(imp_tokken)
+
 corona['title_tokken'] = corona['title'].apply(tokenizer_okt_pos)
 corona['title_imp_tokken'] = corona['title_tokken'].apply(imp_tokken)
-corona.head()
+
+harujongil['title_tokken'] = harujongil['title'].apply(tokenizer_okt_pos)
+harujongil['title_imp_tokken'] = harujongil['title_tokken'].apply(imp_tokken)
+
+COVID['title_tokken'] = COVID['title'].apply(tokenizer_okt_pos)
+COVID['title_imp_tokken'] = COVID['title_tokken'].apply(imp_tokken)
+
+# check
+COVID.head()
+
+# 토크나이져 결과 csv 저장
+dalgona.to_csv('newstitle_dalgona_tokkened.txt', index=False, header=True, sep="\t")
+mask.to_csv('newstitle_mask_tokkened.txt', index=False, header=True, sep="\t")
+society.to_csv('newstitle_society_tokkened.txt', index=False, header=True, sep="\t")
+son.to_csv('newstitle_son_tokkened.txt', index=False, header=True, sep="\t")
+uhan.to_csv('newstitle_uhan_tokkened.txt', index=False, header=True, sep="\t")
+zipcock.to_csv('newstitle_zipcock_tokkened.txt', index=False, header=True, sep="\t")
+corona.to_csv('newstitle_corona_tokkened.txt', index=False, header=True, sep="\t")
+harujongil.to_csv('newstitle_harujongil_tokkened.txt', index=False, header=True, sep="\t")
+COVID.to_csv('newstitle_COVID_tokkened.txt', index=False, header=True, sep="\t")
+
+
+
+
+################ imp_tokken count ################
 
 count = Counter(list_appending(corona['title_imp_tokken']))
 title_count = dict(count.most_common())
 title_count
+
+
 
 
 ################ word cloud ################
@@ -191,6 +236,7 @@ plt.close()
 
 
 #===================== 하루종일 살펴보기 =====================#
+
 harujongil['title_tokken'] = harujongil['title'].apply(tokenizer_okt_pos)
 harujongil['title_imp_tokken'] = harujongil['title_tokken'].apply(imp_tokken)
 harujongil.head()
@@ -199,7 +245,20 @@ count = Counter(list_appending(harujongil['title_imp_tokken']))
 title_count = dict(count.most_common())
 title_count
 
+################ word cloud ################
+from wordcloud import WordCloud
+import matplotlib.pyplot as plt
+os.chdir('C:\\Users\\Danah\\Documents\\GitHub\\Data-Science-for-COVID-19\\Naver_News_keyword_Crawling\\wordcloud_img\\')
+
+%matplotlib inline
+import matplotlib
+from IPython.display import set_matplotlib_formats
+matplotlib.rc('font',family = 'Malgun Gothic')
+set_matplotlib_formats('retina')
+matplotlib.rc('axes',unicode_minus = False)
+
 wordcloud = WordCloud(font_path = 'C:/Windows/Fonts/malgun.ttf', background_color='white',colormap = "Accent_r", width=1500, height=1000).generate_from_frequencies(title_count)
+
 
 fig = plt.figure(1,figsize=(13, 13))
 fig = plt.axis('off')
@@ -261,3 +320,14 @@ a[1].most_common(10)
 a[2].most_common(10)
 a[3].most_common(10)
 a[95].most_common(10)
+
+
+
+['ARP' + str(i) for i in range(1,16)]
+
+COVID = pd.read_csv('newstitle_COVID.txt', sep='\t')
+
+
+[str(i) for i in range(1,16)]
+
+[str(COVID.date[i])[0:4] for i in range(len(COVID))]
